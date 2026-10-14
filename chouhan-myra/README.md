@@ -13,6 +13,7 @@ This first version provides:
   creation.
 - On-demand screenshot OCR and on-demand camera capture for image questions.
 - A small local profile for a name and preferred language.
+- An Android Kivy chat app with a Groq/Gemini selector and Groq-to-Gemini fallback.
 
 It does **not** promise an exact clone, 148 guaranteed languages, or 40+ tools.
 WhatsApp can be opened in a browser, but the assistant does not send messages.
@@ -96,6 +97,18 @@ Run the unit tests with:
 ```bash
 python -m unittest discover -s tests -v
 ```
+
+## Android APK
+
+The Android app is a separate Kivy interface; the desktop Tkinter orb is not
+used on Android. On first launch, enter both a Groq and a Gemini API key. The
+keys are saved in the app's private Android storage, not in the APK or GitHub.
+When Groq is selected and unavailable, the app tries Gemini automatically.
+
+To build a debug APK, open the repository's **Actions** tab, select
+**Build Chouhan SUPER APP APK**, and run the workflow. Download the
+`Chouhan-SUPER-APP-APK` artifact from the completed run. This is a sideloadable
+debug APK, not a Play Store release.
 
 This project is provided as editable source. It does not download or decompile
 the closed-source MYRA package.

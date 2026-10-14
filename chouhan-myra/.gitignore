@@ -5,5 +5,9 @@ __pycache__/
 venv/
 build/
 dist/
+bin/
+.buildozer/
 .pytest_cache/
 .coverage
+*.apk
+*.aab

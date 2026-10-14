@@ -7,6 +7,7 @@ import json
 import mimetypes
 import os
 from pathlib import Path
+from collections.abc import Mapping, Sequence
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
@@ -25,6 +26,7 @@ def get_gemini_response(
     api_key: str | None = None,
     *,
     image_path: str | Path | None = None,
+    history: Sequence[Mapping[str, str]] = (),
     model: str = DEFAULT_MODEL,
     timeout: float = 45,
 ) -> str:
@@ -61,9 +63,23 @@ def get_gemini_response(
             }
         )
 
+    contents: list[dict[str, object]] = []
+    for item in history[-20:]:
+        role = str(item.get("role", "")).strip().lower()
+        message = str(item.get("content", "")).strip()
+        if not message or role not in {"user", "assistant", "model"}:
+            continue
+        contents.append(
+            {
+                "role": "model" if role in {"assistant", "model"} else "user",
+                "parts": [{"text": message}],
+            }
+        )
+    contents.append({"role": "user", "parts": parts})
+
     payload = {
         "systemInstruction": {"parts": [{"text": " ".join(system_parts)}]},
-        "contents": [{"role": "user", "parts": parts}],
+        "contents": contents,
         "generationConfig": {"temperature": 0.6, "maxOutputTokens": 2048},
     }
     url = f"{API_BASE}/{model}:generateContent?{urlencode({'key': key})}"

@@ -34,6 +34,30 @@ class GeminiClientTests(unittest.TestCase):
             "Say hello",
         )
 
+    @patch("myra.ai.gemini.urlopen", return_value=FakeResponse())
+    def test_chat_history_maps_assistant_role_to_gemini_model(
+        self,
+        mocked_urlopen: object,
+    ) -> None:
+        get_gemini_response(
+            "Follow up",
+            api_key="test-key",
+            history=[
+                {"role": "user", "content": "Remember this"},
+                {"role": "assistant", "content": "I will"},
+            ],
+        )
+        request = mocked_urlopen.call_args.args[0]  # type: ignore[attr-defined]
+        payload = json.loads(request.data)
+        self.assertEqual(
+            [item["role"] for item in payload["contents"]],
+            ["user", "model", "user"],
+        )
+        self.assertEqual(
+            payload["contents"][1]["parts"][0]["text"],
+            "I will",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
