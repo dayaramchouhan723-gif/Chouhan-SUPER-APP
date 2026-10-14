@@ -1,0 +1,5 @@
+# Core assistant uses only the Python standard library.
+# Install optional groups from pyproject.toml instead:
+#   python -m pip install -e ".[voice]"
+#   python -m pip install -e ".[vision]"
+#   python -m pip install -e ".[qr]"

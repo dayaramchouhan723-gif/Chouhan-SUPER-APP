@@ -5,6 +5,12 @@ dist
 tmp
 out-tsc
 *.tsbuildinfo
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+build/
+*.egg-info/
 .expo
 .expo-shared
 

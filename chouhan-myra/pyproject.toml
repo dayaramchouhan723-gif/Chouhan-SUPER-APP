@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chouhan-myra"
+version = "0.1.0"
+description = "An independent, local-first Python voice assistant starter"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{ name = "Dayaram Chouhan" }]
+dependencies = []
+
+[project.optional-dependencies]
+voice = ["SpeechRecognition>=3.10", "pyttsx3>=2.90", "PyAudio>=0.2.14"]
+vision = ["mss>=9.0", "Pillow>=10.0", "pytesseract>=0.3.10", "opencv-python>=4.9"]
+qr = ["qrcode[pil]>=7.4"]
+all = [
+  "SpeechRecognition>=3.10",
+  "pyttsx3>=2.90",
+  "PyAudio>=0.2.14",
+  "mss>=9.0",
+  "Pillow>=10.0",
+  "pytesseract>=0.3.10",
+  "opencv-python>=4.9",
+  "qrcode[pil]>=7.4",
+]
+
+[project.scripts]
+chouhan-myra = "myra.main:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["myra*"]
