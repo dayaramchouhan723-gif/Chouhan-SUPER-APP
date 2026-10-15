@@ -1,0 +1,34 @@
+name: Build Chouhan Myra APK - Sky Blue Free
+on:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fix LT_SYS
+        run: |
+          sudo apt-get update
+          sudo apt-get remove -y libtool
+          sudo apt-get install -y libffi-dev libffi7 libtool-bin autoconf automake autotools-dev autoconf-archive build-essential pkg-config zlib1g-dev libssl-dev libltdl-dev python3-pip openjdk-8-jdk unzip
+      - name: Setup Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+      - name: Install Buildozer
+        run: |
+          pip install --upgrade pip
+          pip install cython==0.29.33 buildozer
+      - name: Build APK
+        run: |
+          buildozer -v android debug > build.log 2>&1 || (cat build.log; false)
+        env:
+          LIBTOOL: /usr/bin/libtool
+          LIBTOOLIZE: /usr/bin/libtoolize
+      - name: Upload APK
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Chouhan-Myra-APK-SkyBlue
+          path: bin/*.apk
