@@ -37,9 +37,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            autoconf automake cmake gettext libffi-dev libncurses5-dev \
-            libncursesw5-dev libssl-dev libtinfo6 libtool openjdk-17-jdk \
-            pkg-config unzip zip zlib1g-dev
+            autoconf automake cmake gettext libffi-dev libltdl-dev \
+            libncurses5-dev libncursesw5-dev libssl-dev libtinfo6 libtool \
+            libtool-bin openjdk-17-jdk pkg-config unzip zip zlib1g-dev
 
       - name: Install Buildozer
         run: |

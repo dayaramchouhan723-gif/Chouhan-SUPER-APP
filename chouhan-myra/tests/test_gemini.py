@@ -28,6 +28,8 @@ class GeminiClientTests(unittest.TestCase):
 
         request = mocked_urlopen.call_args.args[0]  # type: ignore[attr-defined]
         payload = json.loads(request.data)
+        self.assertNotIn("test-key", request.full_url)
+        self.assertEqual(request.get_header("X-goog-api-key"), "test-key")
         self.assertIn("systemInstruction", payload)
         self.assertEqual(
             payload["contents"][0]["parts"][0]["text"],

@@ -9,7 +9,6 @@ import os
 from pathlib import Path
 from collections.abc import Mapping, Sequence
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 from myra.ai.languages import requested_language
@@ -82,11 +81,14 @@ def get_gemini_response(
         "contents": contents,
         "generationConfig": {"temperature": 0.6, "maxOutputTokens": 2048},
     }
-    url = f"{API_BASE}/{model}:generateContent?{urlencode({'key': key})}"
+    url = f"{API_BASE}/{model}:generateContent"
     request = Request(
         url,
         data=json.dumps(payload).encode("utf-8"),
-        headers={"Content-Type": "application/json"},
+        headers={
+            "Content-Type": "application/json",
+            "x-goog-api-key": key,
+        },
         method="POST",
     )
 
@@ -94,7 +96,7 @@ def get_gemini_response(
         with urlopen(request, timeout=timeout) as response:
             result = json.loads(response.read().decode("utf-8"))
     except HTTPError as exc:
-        # Do not echo the request URL because it contains the API key.
+        # Do not echo request details or headers.
         detail = exc.read().decode("utf-8", errors="replace")
         try:
             message = json.loads(detail).get("error", {}).get("message", "Request failed")
